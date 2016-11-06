@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 1000f;
+    public float rollSpeed = 1000f;
 
     Rigidbody myRigidbody;
 
@@ -15,38 +15,29 @@ public class PlayerController : MonoBehaviour
 	void Update()
     {
         UpdateMovement();
-        UpdateCamera();
+        //UpdateCamera();
     }
 
     void UpdateMovement()
     {
-        Vector3 moveDirection = Vector3.zero;
+        float rollDirection = 0;
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            moveDirection += Vector3.left;
+            rollDirection = -1f;
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            moveDirection += Vector3.right;
+            rollDirection = 1f;
         }
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-        {
-            moveDirection += Vector3.forward;
-        }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            moveDirection += Vector3.back;
-        }
-
-        myRigidbody.AddForce(moveDirection.normalized * moveSpeed * Time.deltaTime);
+        myRigidbody.AddTorque(Vector3.back * rollDirection * rollSpeed * Time.deltaTime);
     }
 
     void UpdateCamera()
     {
-        Vector3 newCameraPos = transform.position;
-        newCameraPos.y = 10f;
+        Vector3 newCameraPos = Camera.main.transform.position;
+        newCameraPos.x = transform.position.x;
         Camera.main.transform.position = newCameraPos;
     }
 }
