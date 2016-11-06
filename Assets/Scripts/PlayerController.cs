@@ -5,17 +5,17 @@ public class PlayerController : MonoBehaviour
 {
     public float rollSpeed = 1000f;
 
-    Rigidbody myRigidbody;
+    Rigidbody2D myRigidbody;
 
     void Awake()
     {
-        myRigidbody = GetComponent<Rigidbody>();
+        myRigidbody = GetComponent<Rigidbody2D>();
     }
 
 	void Update()
     {
         UpdateMovement();
-        //UpdateCamera();
+        UpdateCamera();
     }
 
     void UpdateMovement()
@@ -24,14 +24,14 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            rollDirection = -1f;
+            rollDirection = 1f;
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            rollDirection = 1f;
+            rollDirection = -1f;
         }
 
-        myRigidbody.AddTorque(Vector3.back * rollDirection * rollSpeed * Time.deltaTime);
+        myRigidbody.AddTorque(rollDirection * rollSpeed * Time.deltaTime);
     }
 
     void UpdateCamera()
