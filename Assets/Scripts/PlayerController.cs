@@ -17,12 +17,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-	void Update()
+    void Update()
     {
-        UpdateMovement();
+        AxisMovement();
         UpdateCamera();
     }
-
+    void AxisMovement()
+    {
+        float input = Input.GetAxis("Horizontal");
+        for (int i = 0; i < gearRigidbodies.Count; i++)
+        {
+            int dir = i % 2;
+            if (dir == 0)
+                dir = -1;
+            gearRigidbodies[i].angularVelocity = input * dir * rollSpeed;
+        }
+    }
     void UpdateMovement()
     {
         float rollDirection = 0;
