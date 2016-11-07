@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
     public float rollSpeed = 1000f;
-
-    Rigidbody2D myRigidbody;
+    public GameObject gears;
+    List<Rigidbody2D> gearRigidbodies;
 
     void Awake()
     {
-        myRigidbody = GetComponent<Rigidbody2D>();
+        gearRigidbodies = new List<Rigidbody2D>();
+
+        foreach (Transform child in gears.transform)
+        {
+            gearRigidbodies.Add(child.gameObject.GetComponent<Rigidbody2D>());
+        }
     }
 
 	void Update()
@@ -21,7 +26,6 @@ public class PlayerController : MonoBehaviour
     void UpdateMovement()
     {
         float rollDirection = 0;
-
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             rollDirection = 1f;
@@ -31,7 +35,19 @@ public class PlayerController : MonoBehaviour
             rollDirection = -1f;
         }
 
-        myRigidbody.AddTorque(rollDirection * rollSpeed * Time.deltaTime);
+        float minGearVelocity = float.MaxValue;
+        foreach (Rigidbody2D gear in gearRigidbodies)
+        {
+            minGearVelocity = Mathf.Min(Mathf.Abs(gear.angularVelocity), minGearVelocity);
+        }
+
+        float gearDirection = 1f;
+        foreach (Rigidbody2D gear in gearRigidbodies)
+        {
+            gear.angularVelocity = Mathf.Sign(gear.angularVelocity) * minGearVelocity;
+            gear.AddTorque(gearDirection * rollDirection * rollSpeed * Time.deltaTime);
+            gearDirection *= -1f;
+        }
     }
 
     void UpdateCamera()
