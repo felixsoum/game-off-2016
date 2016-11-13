@@ -3,60 +3,45 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-    public float rollSpeed = 1000f;
+    public float rollSpeed = 100f;
     public GameObject gears;
-    List<Rigidbody2D> gearRigidbodies;
+    public GameObject slots;
+    List<Transform> gearTransforms = new List<Transform>();
+    List<GearTarget> gearTargets = new List<GearTarget>();
 
     void Awake()
     {
-        gearRigidbodies = new List<Rigidbody2D>();
-
         foreach (Transform child in gears.transform)
         {
-            gearRigidbodies.Add(child.gameObject.GetComponent<Rigidbody2D>());
+            gearTransforms.Add(child);
+        }
+        foreach (Transform child in slots.transform)
+        {
+            GearTarget gearTarget = child.GetComponentInChildren<GearTarget>();
+            if (gearTarget)
+            {
+                gearTargets.Add(gearTarget);
+            }
         }
     }
 
     void Update()
     {
-        AxisMovement();
+        UpdateGears();
         UpdateCamera();
     }
-    void AxisMovement()
-    {
-        float input = Input.GetAxis("Horizontal");
-        for (int i = 0; i < gearRigidbodies.Count; i++)
-        {
-            int dir = i % 2;
-            if (dir == 0)
-                dir = -1;
-            gearRigidbodies[i].angularVelocity = input * dir * rollSpeed;
-        }
-    }
-    void UpdateMovement()
-    {
-        float rollDirection = 0;
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            rollDirection = 1f;
-        }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            rollDirection = -1f;
-        }
 
-        float minGearVelocity = float.MaxValue;
-        foreach (Rigidbody2D gear in gearRigidbodies)
+    void UpdateGears()
+    {
+        float rollDirection = Input.GetAxis("Horizontal");
+        foreach (Transform gear in gearTransforms)
         {
-            minGearVelocity = Mathf.Min(Mathf.Abs(gear.angularVelocity), minGearVelocity);
+            gear.Rotate(Vector3.forward, rollDirection * rollSpeed * Time.deltaTime);
+            rollDirection *= -1f;
         }
-
-        float gearDirection = 1f;
-        foreach (Rigidbody2D gear in gearRigidbodies)
+        foreach (GearTarget target in gearTargets)
         {
-            gear.angularVelocity = Mathf.Sign(gear.angularVelocity) * minGearVelocity;
-            gear.AddTorque(gearDirection * rollDirection * rollSpeed * Time.deltaTime);
-            gearDirection *= -1f;
+            target.Turn(rollDirection);
         }
     }
 
