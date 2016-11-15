@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class WheelScript : GearTarget
+public class WheelPart : GearTarget
 {
     public float turnSpeed = 10000f;
     WheelJoint2D joint;
@@ -17,7 +17,7 @@ public class WheelScript : GearTarget
     {
         joint.connectedBody = mainBody;
         Vector2 relativeToMainPosition = transform.position - joint.connectedBody.transform.position;
-        joint.connectedAnchor = relativeToMainPosition;
+        joint.connectedAnchor = Quaternion.Euler(0, 0, -mainBody.transform.eulerAngles.z) * relativeToMainPosition;
     }
 
     public override void Turn(float direction)

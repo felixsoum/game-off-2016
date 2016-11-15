@@ -6,22 +6,15 @@ public class PlayerController : MonoBehaviour
     public float rollSpeed = 100f;
     public GameObject gears;
     public GameObject slots;
-    List<Transform> gearTransforms = new List<Transform>();
-    List<GearTarget> gearTargets = new List<GearTarget>();
+    Transform[] gearTransforms = new Transform[8];
+    SlotController[] slotControllers = new SlotController[8];
 
     void Awake()
     {
-        foreach (Transform child in gears.transform)
+        for (int i = 0; i < 8; i++)
         {
-            gearTransforms.Add(child);
-        }
-        foreach (Transform child in slots.transform)
-        {
-            GearTarget gearTarget = child.GetComponentInChildren<GearTarget>();
-            if (gearTarget)
-            {
-                gearTargets.Add(gearTarget);
-            }
+            gearTransforms[i] = gears.transform.GetChild(i);
+            slotControllers[i] = slots.transform.GetChild(i).GetComponent<SlotController>();
         }
     }
 
@@ -34,14 +27,15 @@ public class PlayerController : MonoBehaviour
     void UpdateGears()
     {
         float rollDirection = Input.GetAxis("Horizontal");
-        foreach (Transform gear in gearTransforms)
+        for (int i = 0; i < 8; i++)
         {
-            gear.Rotate(Vector3.forward, rollDirection * rollSpeed * Time.deltaTime);
+            Transform gear = gearTransforms[i];
+            SlotController slotController = slotControllers[i];
+            float rotationValue = rollDirection * rollSpeed * Time.deltaTime;
+            gear.Rotate(Vector3.forward, rotationValue);
+            slotController.transform.Rotate(Vector3.forward, rotationValue);
             rollDirection *= -1f;
-        }
-        foreach (GearTarget target in gearTargets)
-        {
-            target.Turn(rollDirection);
+            slotController.Turn(rollDirection);
         }
     }
 
