@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour
             SlotController slotController = slotControllers[i];
             float rotationValue = rollDirection * rollSpeed * Time.deltaTime;
             gear.Rotate(Vector3.forward, rotationValue);
-            slotController.transform.Rotate(Vector3.forward, rotationValue);
             rollDirection *= -1f;
             slotController.Turn(rollDirection);
         }
