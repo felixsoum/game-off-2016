@@ -97,8 +97,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012478066572}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010338196030}
@@ -145,11 +145,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b66862f87d0484743bd351ceb86008c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crankSpeed: 10000
-  pushForce: 100
-  lengthMax: 1
-  retractSpeed: 5
-  expandSpeed: 15
+  pushForce: 7500
+  lengthMax: 2
+  retractSpeed: 2
+  expandSpeed: 20
   springEnd: {fileID: 1000012478066572}
 --- !u!212 &212000010498914306
 SpriteRenderer:
