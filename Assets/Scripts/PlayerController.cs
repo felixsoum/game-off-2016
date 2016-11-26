@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         UpdateGears();
-        UpdateCamera();
     }
 
     void UpdateGears()
@@ -36,12 +35,5 @@ public class PlayerController : MonoBehaviour
             rollDirection *= -1f;
             slotController.Turn(rollDirection);
         }
-    }
-
-    void UpdateCamera()
-    {
-        Vector3 newCameraPos = Camera.main.transform.position;
-        newCameraPos.x = transform.position.x;
-        Camera.main.transform.position = newCameraPos;
     }
 }
